@@ -1,8 +1,11 @@
 #pragma once
 
+#define CHARACTER_WIDTH 7
+#define CHARACTER_HEIGHT 10
+
 /// @brief A char to bit value conversion array.
 /// Contains all visible main ascii chars, starting with space.
-static const bool charmap[][70] = {
+static const bool charmap[][CHARACTER_WIDTH * CHARACTER_HEIGHT] = {
     {0},// SPACE
     {// !
         0, 0, 0, 1, 0, 0, 0,

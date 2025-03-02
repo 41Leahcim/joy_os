@@ -123,14 +123,14 @@ volatile size_t x = 1, y = 1;
 /// @param framebuffer The framebuffer to write the character to
 /// @param c The character to write
 void putchar(struct limine_framebuffer *framebuffer, const char c){
-    const size_t character_width = 14;
     const size_t character_height = 20;
+    const size_t character_width = character_height * CHARACTER_WIDTH / CHARACTER_HEIGHT;
     const size_t character_margin = 4;
     if(c >= 32 && c <= 42){
         for(size_t i = 0;i < character_height;i++){
             volatile uint32_t *row = pixel_address(framebuffer, 0, y + i);
             for(size_t j = 0;j < character_width;j++){
-                row[x + j] = WHITE * charmap[c - 32][(i / 2) * 7 + j / 2];
+                row[x + j] = WHITE * charmap[c - 32][(i * CHARACTER_HEIGHT / character_height * CHARACTER_WIDTH) + j * CHARACTER_WIDTH / character_width];
             }
         }
         x += character_width + character_margin;
@@ -185,7 +185,7 @@ void kmain(void) {
     // Fetch the first framebuffer.
     struct limine_framebuffer *framebuffer = framebuffer_request.response->framebuffers[0];
 
-    const char message[] = "!\r! \"#$%&'()*\b*";
+    const char message[] = "!\r! \"#$%&'()*\b*+!";
     puts(framebuffer, message, sizeof(message) - 1);
 
     // We're done, just hang...
