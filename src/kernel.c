@@ -126,7 +126,7 @@ void putchar(struct limine_framebuffer *framebuffer, const char c){
     const size_t character_height = 20;
     const size_t character_width = character_height * CHARACTER_WIDTH / CHARACTER_HEIGHT;
     const size_t character_margin = 4;
-    if(c >= 32 && c <= 42){
+    if(c >= 32 && (size_t)c < 32 + sizeof(charmap) / sizeof(charmap[0])){
         for(size_t i = 0;i < character_height;i++){
             volatile uint32_t *row = pixel_address(framebuffer, 0, y + i);
             for(size_t j = 0;j < character_width;j++){
@@ -185,7 +185,7 @@ void kmain(void) {
     // Fetch the first framebuffer.
     struct limine_framebuffer *framebuffer = framebuffer_request.response->framebuffers[0];
 
-    const char message[] = "!\r! \"#$%&'()*\b*+!";
+    const char message[] = "!\r! \"#$%&'()*\b*+,-./01234567";
     puts(framebuffer, message, sizeof(message) - 1);
 
     // We're done, just hang...
